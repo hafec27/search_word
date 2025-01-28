@@ -1,0 +1,110 @@
+<!-- myapp/templates/search.html -->
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wonder town</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
+</head>
+<body>
+
+   <!-- メニューバー -->
+<nav class="navbar">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="#">Wonder Town</a>
+        </div>
+        <div class="navbar-links">
+            <a href="{% url 'create_post' %}" class="btn-simple">＋ 新規投稿</a>
+        </div>
+    </div>
+</nav>
+
+
+<header>
+
+    <div class="slider">
+        <div class="slide"><img src="{% static 'images/header0006.png' %}" alt="スライド1"></div>
+        <div class="slide"><img src="{% static 'images/header0007.png' %}" alt="スライド2"></div>
+        <div class="slide"><img src="{% static 'images/header0008.png' %}" alt="スライド3"></div>
+    </div>
+    <div class="header-content">
+        <div class="title-section">
+            <h1>wonder town</h1>
+            <p>あなたのアイデアや短文を共有し、検索できます。</p>
+        </div>
+    </div>
+</header>
+
+<main>
+    <div class="container">
+        <!-- 検索フォーム（左側） -->
+        <form method="get" class="search-form">
+            <label for="keyword">キーワード検索:</label>
+            <input type="text" name="keyword" placeholder="キーワードを入力">
+
+            <label for="category">カテゴリ:</label>
+            <select name="category">
+                <option value="">すべて</option>
+                <option value="miracle">奇跡</option>
+                <option value="amazement">驚愕</option>
+                <option value="thought">思索</option>
+                <option value="fantasy">幻想</option>
+                <option value="strange">奇妙</option>
+                <option value="other">その他</option>
+            </select>
+
+            <label for="sort">並び替え:</label>
+            <select name="sort">
+                <option value="newest">新しい順</option>
+                <option value="oldest">古い順</option>
+                <option value="likes">いいねが多い順</option>
+            </select>
+
+            <button type="submit">検索</button>
+        </form>
+
+        <!-- 投稿リスト（右側） -->
+        <div class="post-list">
+            <ul>
+                {% for post in page_obj %}
+                <li>
+                    <a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a>
+                    - {{ post.created_at }}
+                </li>
+                {% empty %}
+                <li>No results found</li>
+                {% endfor %}
+            </ul>
+
+            <!-- ページネーション -->
+            <div class="pagination">
+                <span class="step-links">
+                    {% if page_obj.has_previous %}
+                        <a href="?page=1">最初</a>
+                        <a href="?page={{ page_obj.previous_page_number }}">前へ</a>
+                    {% endif %}
+
+                    <span>ページ {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}">次へ</a>
+                        <a href="?page={{ page_obj.paginator.num_pages }}">最後</a>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+    </div>
+</main>
+
+
+<footer>
+    <p>&copy; 2025 短文投稿検索サイト. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

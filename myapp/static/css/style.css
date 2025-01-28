@@ -1,0 +1,238 @@
+/* 全体のスタイル */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #333;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+/* ヘッダーのスタイル */
+header {
+    margin-top: 30px;
+    position: relative;
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    height: 460px;
+    overflow: hidden;
+}
+
+/* スライダー */
+.slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+/* 各スライド */
+.slider .slide {
+    min-width: 100%;
+    height: 100%;
+}
+
+.slider .slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* ヘッダーコンテンツ */
+.header-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    color: white;
+    z-index: 2;
+    text-align: left;
+}
+
+h1 {
+    font-family: 'Creepster', cursive;
+    margin: 0;
+    font-size: 4.5em; /* フォントサイズを大きく */
+    color: #f8f9fa; /* 明るい色（背景とのコントラストを強調） */
+    -webkit-text-stroke: 2px black; /* 黒い枠線を指定 */
+    font-weight: bold; /* 文字を太く */
+    text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.6); /* 影を強調 */
+    text-align: center; /* 中央揃え */
+    animation: shake 3s ease-in-out infinite; /* アニメーション追加 */
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    50% { transform: translateX(10px); }
+    75% { transform: translateX(-10px); }
+    100% { transform: translateX(0); }
+}
+
+
+/* メインコンテナ */
+.container {
+    display: flex;
+    align-items: stretch; /* 子要素の高さを揃える */
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+
+
+/* 検索フォーム */
+.search-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 10px 15px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 300px;
+    width: 100%;
+    height: auto; /* 高さを自動調整 */
+    
+}
+
+/* 投稿リスト */
+.post-list {
+    flex: 1; /* 残りのスペースを使用 */
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow-y: auto; /* 内容が多い場合でもスクロール可能にする */
+    max-height: 80vh; /* 最大高さを指定 */
+    height: auto; /* 高さを自動調整 */
+}
+
+
+/* 各リストアイテム */
+.post-list ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.post-list li {
+    margin-bottom: 10px;
+}
+
+/* ページネーション */
+.pagination {
+    margin-top: 20px;
+}
+
+.step-links a {
+    text-decoration: none;
+    color: #007bff;
+    margin: 0 5px;
+}
+
+.step-links a:hover {
+    text-decoration: underline;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .search-form {
+        width: 100%;
+    }
+
+    .post-list {
+        width: 100%;
+    }
+}
+
+/* メニューバー */
+.navbar {
+    background-color: #333; /* 背景色 */
+    padding: 10px 20px;
+    color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.container {
+    display: flex;
+    justify-content: space-between; /* 左右に要素を配置 */
+    align-items: center;
+}
+
+.navbar-brand a {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-decoration: none;
+    color: white;
+}
+
+.navbar-links a {
+    text-decoration: none;
+    color: white;
+    background-color: #007bff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    margin-left: 10px; /* ボタン間に少しスペースを追加 */
+}
+
+.navbar-links a:hover {
+    background-color: #0056b3;
+}
+
+
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        align-items: flex-start; /* モバイルでは縦並び */
+    }
+
+    .navbar-links {
+        margin-top: 10px;
+    }
+} 
+
+/* 削除ボタン */
+.delete-btn {
+    background-color: #dc3545;
+    color: white;
+    padding: 5px 10px;
+    font-size: 0.8rem;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.delete-btn:hover {
+    background-color: #c82333;
+}
+
+/* パスワード入力フィールド */
+#delete-password {
+    padding: 5px;
+    font-size: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ post.title }}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- アイコン用のCDN -->
+    <style>
+        /* 基本のスタイル */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7fa;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            text-align: justify;
+        }
+
+        /* いいねボタン */
+.like-btn {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 5px 10px; /* サイズを小さく */
+    font-size: 0.8rem; /* フォントサイズを小さく */
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    transition: background-color 0.3s ease;
+}
+
+.like-btn:hover {
+    background-color: #0056b3;
+}
+
+.like-btn i {
+    margin-right: 5px; /* アイコンの間隔を調整 */
+}
+
+/* 戻るボタン */
+.back-btn {
+    background-color: #28a745;
+    color: white;
+    padding: 5px 10px; /* サイズを小さく */
+    font-size: 0.8rem; /* フォントサイズを小さく */
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 10px; /* 上部の余白を調整 */
+}
+
+.back-btn:hover {
+    background-color: #218838;
+}
+
+/* 削除ボタン */
+.delete-btn {
+    background-color: #dc3545;
+    color: white;
+    padding: 5px 10px;
+    font-size: 0.8rem;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.delete-btn:hover {
+    background-color: #c82333;
+}
+
+/* パスワード入力フィールド */
+#delete-password {
+    padding: 5px;
+    font-size: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+        
+        /* いいね数表示 */
+        .like-count {
+            font-size: 1.2rem;
+            margin-top: 20px;
+        }
+
+        /* レスポンシブ対応 */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            p {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>{{ post.title }}</h1>
+        <p>{{ post.content }}</p>
+        
+        <!-- いいねボタン -->
+        <button class="like-btn" id="like-button" data-post-id="{{ post.id }}">
+            <i class="fas fa-thumbs-up"></i> いいね
+        </button>
+
+        <p class="like-count">いいね数: {{ post.likes }}</p>
+
+        <!-- 投稿一覧に戻るボタン -->
+        <a href="{% url 'post_list' %}" class="back-btn">投稿一覧に戻る</a>
+
+        <!-- パスワード入力と削除ボタン -->
+
+    <input type="password" id="delete-password" placeholder="パスワードを入力" />
+    <button class="delete-btn" id="delete-button" data-post-id="{{ post.id }}">
+        削除
+    </button>
+    <p id="delete-message" style="color: red; margin-top: 10px;"></p>
+</div>
+
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            // いいねボタンのクリックイベント
+            $('#like-button').click(function() {
+                var postId = $(this).data('post-id');
+
+                $.ajax({
+                    url: '/post/' + postId + '/like/',  // いいねのAPI URL
+                    type: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',  // CSRFトークンを送信
+                    },
+                    success: function(response) {
+                        // いいね数を更新
+                        $('.like-count').text('いいね数: ' + response.likes);
+                    },
+                    error: function(xhr, errmsg, err) {
+                        console.error("Error: " + errmsg);
+                    }
+                });
+            });
+        });
+    </script>
+
+<script>
+    // CSRFトークンをヘッダーに追加するための設定
+    function getCsrfToken() {
+        var csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        return csrfToken;
+    }
+
+    document.getElementById('like-button').addEventListener('click', function() {
+        var postId = this.getAttribute('data-post-id');
+        
+        fetch('/post/' + postId + '/like/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCsrfToken(),  // CSRFトークンをヘッダーに追加
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            // ボタンに新しい「いいね」数を表示
+            this.innerHTML = 'いいね (' + data.likes + ')';
+        })
+        .catch(error => console.error('Error:', error));
+    });
+</script>
+
+</body>
+</html>
+
+
+<script>
+    $(document).ready(function() {
+        // 削除ボタンのクリックイベント
+        $('#delete-button').click(function() {
+            var postId = $(this).data('post-id');
+            var password = $('#delete-password').val(); // 入力されたパスワードを取得
+
+            if (!password) {
+                $('#delete-message').text('パスワードを入力してください。');
+                return;
+            }
+
+            $.ajax({
+                url: '/post/' + postId + '/delete/', // 削除APIのURL
+                type: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}', // CSRFトークンを送信
+                },
+                data: {
+                    password: password // パスワードを送信
+                },
+                success: function(response) {
+                    if (response.success) {
+                        // 削除成功時の処理
+                        $('#delete-message').css('color', 'green').text('投稿が削除されました。');
+                        setTimeout(() => {
+                            window.location.href = '{% url "post_list" %}'; // 投稿一覧にリダイレクト
+                        }, 2000);
+                    } else {
+                        // 削除失敗時の処理
+                        $('#delete-message').text('パスワードが間違っています。');
+                    }
+                },
+                error: function(xhr, errmsg, err) {
+                    $('#delete-message').text('削除中にエラーが発生しました。');
+                }
+            });
+        });
+    });
+</script>
+
